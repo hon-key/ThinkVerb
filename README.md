@@ -1,2 +1,2 @@
 # ThinkVerb
-A super cool animation interface based on CoreAanimation
+A super cool animation interface based on CoreAnimation
