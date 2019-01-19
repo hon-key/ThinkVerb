@@ -135,7 +135,9 @@
  Creates an animation sprite to animate border width and color of the view.
  */
 - (TVSpriteBorder *)border;
-
+/**
+ Creates an animation sprite to animate path
+ */
 - (TVSpritePath *)path;
 @end
 
@@ -157,6 +159,10 @@
  Ease In timing function
  */
 + (id)extremeEaseIn;
+/**
+ Linear timing function
+ */
++ (id)linear;
 @end
 
 #pragma mark - Basic Sprite

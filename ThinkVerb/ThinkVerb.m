@@ -143,6 +143,7 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 }
 + (id)extremeEaseOut {return [self functionWithControlPoints:0 :0 :0 :1];}
 + (id)extremeEaseIn {return [self functionWithControlPoints:1 :0 :1 :1];}
++ (id)linear {return [self functionWithControlPoints:0 :0 :0 :0];}
 
 @end
 

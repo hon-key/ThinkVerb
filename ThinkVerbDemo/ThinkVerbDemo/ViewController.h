@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef struct AnimationUnit {
+    NSString *key;
+    NSString *selector;
+}AnimationUnit;
+
+extern AnimationUnit animationUnits[];
+
 @interface ViewController : UIViewController
 
+@property AnimationUnit *unit;
 
 @end
 
