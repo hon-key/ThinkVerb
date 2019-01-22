@@ -195,7 +195,9 @@
  */
 - (T (^)(CGFloat))delay;
 /**
- sets animation timing function
+ sets animation timing function.
+ if you are setting this property to keyframe animation like 'path',timing should be call after a calling of keyframe action,the timing funtion is bounded to the keyframe action.
+ notice that if you are setting the timing property of appearance sprite,than you make a keyframe animation like 'path',timing property will effect the whole animation except every keyframe.
  */
 - (T (^)(TVTiming *))timing;
 /**
@@ -203,9 +205,9 @@
  */
 - (T)reverse;
 /**
- Determines if the animation is removed from the target layer’s animations upon completion.
+ Determines if the animation is removed from the target layer’s animations upon completion,default is NO.
  */
-- (T)keepAliveAtEnd;
+- (T (^)(BOOL))keepAlive;
 /**
  activates the animation and return the identifier of the animation.
  */
@@ -238,7 +240,19 @@
 
 @interface ThinkVerbSpriteKeyframe <T> : ThinkVerbSprite <T,CAKeyframeAnimation *>
 @property (nonatomic,copy) NSString *keyPath;
+/*
+ The "mode". Possible values are `kCAAnimationDiscrete', `kCAAnimationLinear',
+ `kCAAnimationPaced', `kCAAnimationCubic' and `kCAAnimationCubicPaced'.
+ Defaults to `kCAAnimationLinear'. When set to
+ `kCAAnimationPaced' or `kCAAnimationCubicPaced' the `timing' and `endAtPercent'
+ properties of the animation are ignored and calculated implicitly.
+ */
 - (T (^)(CAAnimationCalculationMode))mode;
+/**
+ sets the end point of a keyFrame animation action,percent value should be in range of [0,100],
+ and the percent of begin point and end point must be 0 and 100, every percent must be larger than the previous percent
+ you no need to call this method all the time, because system will automatically caculate the average value between the two point if there are points betwwen them.
+ */
 - (T (^)(NSInteger))endAtPercent;
 @end
 
@@ -250,15 +264,15 @@
 /**
  sets the x axis as rotation axis.
  */
-- (TVSpriteRotate * (^)(void))x;
+- (TVSpriteRotate *)x;
 /**
  sets the y axis as rotation axis.
  */
-- (TVSpriteRotate * (^)(void))y;
+- (TVSpriteRotate *)y;
 /**
  sets the z axis as rotation axis.
  */
-- (TVSpriteRotate * (^)(void))z;
+- (TVSpriteRotate *)z;
 /**
  sets rotation angle range.
  */
@@ -322,17 +336,12 @@
 @end
 
 @interface TVSpriteBounds : ThinkVerbSpriteGroup <TVSpriteBounds *>
-- (TVSpriteBounds * (^)(CGRect,CGRect))boundsRect;
-- (TVSpriteBounds * (^)(CGFloat,CGFloat))x;
-- (TVSpriteBounds * (^)(CGFloat,CGFloat))y;
 - (TVSpriteBounds * (^)(CGFloat,CGFloat))width;
 - (TVSpriteBounds * (^)(CGFloat,CGFloat))height;
-- (TVSpriteBounds * (^)(CGFloat))xTo;
-- (TVSpriteBounds * (^)(CGFloat))yTo;
 - (TVSpriteBounds * (^)(CGFloat))widthTo;
 - (TVSpriteBounds * (^)(CGFloat))heightTo;
-- (TVSpriteBounds * (^)(CGFloat,CGFloat,CGFloat,CGFloat))from;
-- (TVSpriteBounds * (^)(CGFloat,CGFloat,CGFloat,CGFloat))to;
+- (TVSpriteBounds * (^)(CGFloat,CGFloat))from;
+- (TVSpriteBounds * (^)(CGFloat,CGFloat))to;
 @end
 
 @interface TVSpriteAnchor : ThinkVerbSpriteGroup <TVSpriteAnchor *>
@@ -355,7 +364,6 @@
 @end
 
 @interface TVSpriteContents : ThinkVerbSpriteGroup <TVSpriteContents *>
-- (TVSpriteContents * (^)(UIImage *))draw;
 - (TVSpriteContents * (^)(CGRect))rect;
 - (TVSpriteContents * (^)(CGFloat))scale;
 - (TVSpriteContents * (^)(CGRect))center;

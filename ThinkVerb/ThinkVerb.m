@@ -30,6 +30,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     if (!animations) animations = [NSMutableArray new];
     [animations addObject:animation];
     group.animations = animations;
+//    CALayer d;
 }
 
 static void tv_cache_animations_into_sprite(ThinkVerbSprite *sprite,id animations,SEL cmd) {
@@ -202,6 +203,13 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     self.animation.fillMode = kCAFillModeForwards;
     return self;
 }
+- (id (^)(BOOL))keepAlive {
+    return ^ id (BOOL value) {
+        self.animation.removedOnCompletion = !value;
+        self.animation.fillMode = value ? kCAFillModeForwards : kCAFillModeRemoved;
+        return self;
+    };
+}
 - (NSString *(^)(void))activate {
     return ^ NSString * (void) {
         [self.thinkVerb.view.layer addAnimation:self.animation forKey:self.identifier];
@@ -347,13 +355,11 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
         }
         NSAssert(animation.keyTimes.lastObject.floatValue == 1, @"the last keyTime must be 1");
     }
-    if (animation.timingFunctions) {
-        NSMutableArray *timingFunctions = [animation.timingFunctions mutableCopy];
-        while (timingFunctions.count < animation.values.count - 1) {
-            [timingFunctions addObject:[TVTiming functionWithName:kCAMediaTimingFunctionDefault]];
-        }
-        animation.timingFunctions = timingFunctions;
+    NSMutableArray *timingFunctions = [animation.timingFunctions mutableCopy] ?: [NSMutableArray new];
+    while (timingFunctions.count < animation.values.count - 1) {
+        [timingFunctions addObject:[TVTiming functionWithName:kCAMediaTimingFunctionDefault]];
     }
+    animation.timingFunctions = timingFunctions;
     return super.activate;
 }
 
@@ -370,23 +376,17 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 - (NSString *)keyPath {
     return @"transform.rotation.z";
 }
-- (TVSpriteRotate *(^)(void))x {
-    return ^ TVSpriteRotate * (void) {
-        self.animation.keyPath = @"transform.rotation.x";
-        return self;
-    };
+- (TVSpriteRotate *)x {
+    self.animation.keyPath = @"transform.rotation.x";
+    return self;
 }
-- (TVSpriteRotate *(^)(void))y {
-    return ^ TVSpriteRotate * (void) {
-        self.animation.keyPath = @"transform.rotation.y";
-        return self;
-    };
+- (TVSpriteRotate *)y {
+    self.animation.keyPath = @"transform.rotation.y";
+    return self;
 }
-- (TVSpriteRotate *(^)(void))z {
-    return ^ TVSpriteRotate * (void) {
-        self.animation.keyPath = @"transform.rotation.z";
-        return self;
-    };
+- (TVSpriteRotate *)z {
+    self.animation.keyPath = @"transform.rotation.z";
+    return self;
 }
 - (TVSpriteRotate *(^)(CGFloat))startAngle {
     return ^ TVSpriteRotate * (CGFloat value) {
@@ -721,33 +721,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 @end
 
 @implementation TVSpriteBounds
-- (TVSpriteBounds *(^)(CGRect, CGRect))boundsRect {
-    return ^ TVSpriteBounds * (CGRect from,CGRect to) {
-        CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
-        subAnimation.fromValue = @(from);
-        subAnimation.toValue = @(to);
-        tv_add_animation_for_group(self.animation,subAnimation);
-        return self;
-    };
-}
-- (TVSpriteBounds *(^)(CGFloat, CGFloat))x {
-    return ^ TVSpriteBounds * (CGFloat from,CGFloat to) {
-        CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.origin.x"];
-        subAnimation.fromValue = @(from);
-        subAnimation.toValue = @(to);
-        tv_add_animation_for_group(self.animation,subAnimation);
-        return self;
-    };
-}
-- (TVSpriteBounds *(^)(CGFloat, CGFloat))y {
-    return ^ TVSpriteBounds * (CGFloat from,CGFloat to) {
-        CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.origin.y"];
-        subAnimation.fromValue = @(from);
-        subAnimation.toValue = @(to);
-        tv_add_animation_for_group(self.animation,subAnimation);
-        return self;
-    };
-}
 - (TVSpriteBounds *(^)(CGFloat, CGFloat))width {
     return ^ TVSpriteBounds * (CGFloat from,CGFloat to) {
         CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
@@ -761,22 +734,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     return ^ TVSpriteBounds * (CGFloat from,CGFloat to) {
         CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.height"];
         subAnimation.fromValue = @(from);
-        subAnimation.toValue = @(to);
-        tv_add_animation_for_group(self.animation,subAnimation);
-        return self;
-    };
-}
-- (TVSpriteBounds *(^)(CGFloat))xTo {
-    return ^ TVSpriteBounds * (CGFloat to) {
-        CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.origin.x"];
-        subAnimation.toValue = @(to);
-        tv_add_animation_for_group(self.animation,subAnimation);
-        return self;
-    };
-}
-- (TVSpriteBounds *(^)(CGFloat))yTo {
-    return ^ TVSpriteBounds * (CGFloat to) {
-        CABasicAnimation *subAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.origin.y"];
         subAnimation.toValue = @(to);
         tv_add_animation_for_group(self.animation,subAnimation);
         return self;
@@ -799,21 +756,21 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     };
 }
 
-- (TVSpriteBounds *(^)(CGFloat, CGFloat, CGFloat, CGFloat))from {
-    return ^ TVSpriteBounds * (CGFloat x,CGFloat y,CGFloat width,CGFloat height) {
+- (TVSpriteBounds *(^)(CGFloat, CGFloat))from {
+    return ^ TVSpriteBounds * (CGFloat width,CGFloat height) {
         CABasicAnimation *subAnimation = tv_get_animations_from_sprite(self, _cmd);
         subAnimation = subAnimation ?: [CABasicAnimation animationWithKeyPath:@"bounds"];
-        subAnimation.fromValue = @(CGRectMake(x, y, width, height));
+        subAnimation.fromValue = @(CGRectMake(0, 0, width, height));
         tv_cache_animations_into_sprite(self, subAnimation, _cmd);
         return self;
     };
 }
 
-- (TVSpriteBounds *(^)(CGFloat, CGFloat, CGFloat, CGFloat))to {
-    return ^ TVSpriteBounds * (CGFloat x,CGFloat y,CGFloat width,CGFloat height) {
+- (TVSpriteBounds *(^)(CGFloat, CGFloat))to {
+    return ^ TVSpriteBounds * (CGFloat width,CGFloat height) {
         CABasicAnimation *subAnimation = tv_get_animations_from_sprite(self, @selector(from));
         subAnimation = subAnimation ?: [CABasicAnimation animationWithKeyPath:@"bounds"];
-        subAnimation.toValue = @(CGRectMake(x, y, width, height));
+        subAnimation.toValue = @(CGRectMake(0, 0, width, height));
         tv_add_animation_for_group(self.animation,subAnimation);
         return self;
     };
@@ -976,11 +933,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
-}
-- (TVSpriteContents *(^)(UIImage *))draw {
-    return ^ TVSpriteContents * (UIImage *to) {
-        return self.drawRange(nil,to);
-    };
 }
 - (TVSpriteContents *(^)(CGRect, CGRect))rectRange {
     return ^ TVSpriteContents * (CGRect from, CGRect to) {
@@ -1162,13 +1114,14 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 }
 - (void)addCachedCurvePointIfNeeded {
     if (!CGPointEqualToPoint(self.cachedCurvePoint, CGRectNull.origin)) {
-        NSAssert(CGPointEqualToPoint(self.cachedCpt1, CGRectNull.origin) ||
-                 CGPointEqualToPoint(self.cachedCpt2, CGRectNull.origin), @"you should set control point");
+        NSAssert(!CGPointEqualToPoint(self.cachedCpt1, CGRectNull.origin) &&
+                 !CGPointEqualToPoint(self.cachedCpt2, CGRectNull.origin), @"you should set control point");
         CGMutablePathRef path = self.animation.path;
         CGPathAddCurveToPoint(path, NULL,
                               self.cachedCpt1.x, self.cachedCpt1.y,
                               self.cachedCpt2.x, self.cachedCpt2.y,
                               self.cachedCurvePoint.x, self.cachedCurvePoint.y);
+        self.cachedCurvePoint = self.cachedCpt1 = self.cachedCpt2 = CGRectNull.origin;
     }
 }
 - (void)addValueToValuesWithX:(CGFloat)x y:(CGFloat)y {

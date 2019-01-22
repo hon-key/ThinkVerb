@@ -13,11 +13,16 @@ typedef struct AnimationUnit {
     NSString *selector;
 }AnimationUnit;
 
-extern AnimationUnit animationUnits[];
+typedef struct AnimationSection {
+    NSString *name;
+    AnimationUnit *unit;
+}AnimationSection;
+
+extern AnimationSection animationSections[];
+extern AnimationUnit baseAnimations[];
+extern AnimationUnit animationSets[];
 
 @interface ViewController : UIViewController
-
 @property AnimationUnit *unit;
-
 @end
 
