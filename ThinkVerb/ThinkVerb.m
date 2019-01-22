@@ -30,7 +30,6 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     if (!animations) animations = [NSMutableArray new];
     [animations addObject:animation];
     group.animations = animations;
-//    CALayer d;
 }
 
 static void tv_cache_animations_into_sprite(ThinkVerbSprite *sprite,id animations,SEL cmd) {
@@ -486,7 +485,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
         translationX.fromValue = @(x);
         translationY.fromValue = @(y);
         translationZ.fromValue = @(z);
-        CALayer c;
         tv_cache_animations_into_sprite(self, @[translationX,translationY,translationZ], _cmd);
         return self;
     };
@@ -925,7 +923,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
         drawAnim.fromValue = from ? (__bridge id)from.CGImage : self.thinkVerb.presentationLayer.contents ?: (__bridge id)[self nilImage].CGImage;
         drawAnim.toValue = to ? (__bridge id)to.CGImage : (__bridge id)[self nilImage].CGImage;
         tv_add_animation_for_group(self.animation, drawAnim);
-        CALayer d;
         return self;
     };
 }
