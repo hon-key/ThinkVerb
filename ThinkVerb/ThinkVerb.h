@@ -258,35 +258,30 @@
 
 #pragma mark - Sprite
 /**
- Rotation sprite
+Rotation sprite,based on ThinkVerbTransform3DType
+'x' : sets the x axis as rotation axis
+'y' : sets the y axis as rotation axis
+'z' : sets the z axis as rotation axis
+'angle' : sets rotation angle range
+'startAngle' : sets rotation start angle
+'endAngle' : sets rotation end angle
  */
 @interface TVSpriteRotate : ThinkVerbSpriteBasic <TVSpriteRotate *> <ThinkVerbTransform3DType>
-/**
- sets the x axis as rotation axis.
- */
 - (TVSpriteRotate *)x;
-/**
- sets the y axis as rotation axis.
- */
 - (TVSpriteRotate *)y;
-/**
- sets the z axis as rotation axis.
- */
 - (TVSpriteRotate *)z;
-/**
- sets rotation angle range.
- */
 - (TVSpriteRotate * (^)(CGFloat,CGFloat))angle;
-/**
- sets rotation start angle.
- */
 - (TVSpriteRotate * (^)(CGFloat))startAngle;
-/**
- sets rotation end angle.
- */
 - (TVSpriteRotate * (^)(CGFloat))endAngle;
 @end
 
+/**
+ Scale sprite,use this sprite to scale an UIView
+ 'x/y/z' : sets the scale factor of x/y/z axis
+ 'xTo/yTo/zTo' : sets the scale factor of x/y/z axis to a value,with current value as a start value
+ 'from' : sets a start value to scale factor of all axis, you should call 'to' method after calling this
+ 'to' : sets a end value to scale factor of all axis, you no need to call 'from' mehod before calling this
+ */
 @interface TVSpriteScale : ThinkVerbSpriteGroup <TVSpriteScale *> <ThinkVerbTransform3DType>
 - (TVSpriteScale * (^)(CGFloat,CGFloat))x;
 - (TVSpriteScale * (^)(CGFloat,CGFloat))y;
@@ -298,6 +293,13 @@
 - (TVSpriteScale * (^)(CGFloat))to;
 @end
 
+/**
+ Translate sprite,use this sprite to make translation to an UIView,using offset value
+ 'x/y/z' : sets the translation offset of x/y/z axis
+ 'xBy/yBy/zBy' : sets the translation offset of x/y/z axis to a value,with current value as a start value
+ 'from' : sets a start value to translation offset of all axis, you should call 'to' method after calling this
+ 'to' : sets a end value to scale factor of all axis, you no need to call 'from' mehod before calling this
+ */
 @interface TVSpriteTranslate : ThinkVerbSpriteGroup <TVSpriteTranslate *> <ThinkVerbTransform3DType>
 - (TVSpriteTranslate * (^)(CGFloat,CGFloat,CGFloat))from;
 - (TVSpriteTranslate * (^)(CGFloat,CGFloat,CGFloat))to;
@@ -309,6 +311,13 @@
 - (TVSpriteTranslate * (^)(CGFloat))zBy;
 @end
 
+/**
+ Move sprite,use this sprite to make translation to an UIView,different from 'TVSpriteTranslate',it use logical coordinate to make translation,and is not a 'ThinkVerbTransform3DType' so you cannot apply it to sublayer
+ 'x/y/z' : sets the translation offset of x/y/z axis
+ 'xBy/yBy/zBy' : sets the translation offset of x/y/z axis to a value,with current value as a start value
+ 'from' : sets a start value to translation offset of all axis, you should call 'to' method after calling this
+ 'to' : sets a end value to scale factor of all axis, you no need to call 'from' mehod before calling this
+ */
 @interface TVSpriteMove : ThinkVerbSpriteGroup <TVSpriteMove *>
 - (TVSpriteMove * (^)(CGFloat,CGFloat,CGFloat))offset;
 - (TVSpriteMove * (^)(CGFloat,CGFloat,CGFloat))from;
@@ -321,6 +330,13 @@
 - (TVSpriteMove * (^)(CGFloat))zTo;
 @end
 
+/**
+ Shadow sprite,use this sprite to make animate shaddow to an UIView
+ 'offset/offsetTo' : animate shadowOffset,use offset to animate in range,use offsetTo to animate from current value to target value
+ 'opacity/opacityTo' : animate shadowOpacity
+ 'radius/radiusTo' : animate shadowRadius
+ 'color/colorTo' : animate shadowColor
+ */
 @interface TVSpriteShadow : ThinkVerbSpriteGroup <TVSpriteShadow *>
 - (TVSpriteShadow * (^)(CGFloat,CGFloat))offsetTo;
 - (TVSpriteShadow * (^)(CGSize,CGSize))offset;
@@ -335,6 +351,12 @@
 - (TVSpriteShadow * (^)(UIColor *,UIColor *))color;
 @end
 
+/**
+ Bounds sprite,use this sprite to animate Bounds of an UIView,this will makes an effect like what you make using scale sprite
+ 'width/widthTo' : animate width of the bounds of view to a value
+ 'height/heightTo' : animate height of the bounds of view to a value
+ 'from/to' : animate height and height of the bounds of view to a value
+ */
 @interface TVSpriteBounds : ThinkVerbSpriteGroup <TVSpriteBounds *>
 - (TVSpriteBounds * (^)(CGFloat,CGFloat))width;
 - (TVSpriteBounds * (^)(CGFloat,CGFloat))height;
@@ -344,6 +366,10 @@
 - (TVSpriteBounds * (^)(CGFloat,CGFloat))to;
 @end
 
+/**
+ Anchor sprite,use this sprite to animate anchor of an UIView
+ Normally,anchor is related to bounds,move and ThinkVerbTransform3DType sprite,more detail in CoreAnimation Programming Guide
+ */
 @interface TVSpriteAnchor : ThinkVerbSpriteGroup <TVSpriteAnchor *>
 - (TVSpriteAnchor * (^)(CGFloat,CGFloat,CGFloat))offset;
 - (TVSpriteAnchor * (^)(CGFloat,CGFloat,CGFloat))from;
@@ -356,6 +382,9 @@
 - (TVSpriteAnchor * (^)(CGFloat))zTo;
 @end
 
+/**
+ Fade sprite,use this sprite to animate opacity of an UIView
+ */
 @interface TVSpriteFade : ThinkVerbSpriteBasic <TVSpriteFade *>
 - (TVSpriteFade *)fadeOut;
 - (TVSpriteFade *)fadeIn;
@@ -363,6 +392,16 @@
 - (TVSpriteFade * (^) (CGFloat))to;
 @end
 
+/**
+ Contents sprite,use this sprite to animate bitmap of an UIView's layer.
+ 'drawRange' : animate from a bitmap to another bitmap, nil represents no bitmap
+ 'rect/rectRange' : animate rectangle of the contents,a rectangle in normalized image coordinates defining the
+                    subrectangle of the `contents' property that will be drawn into the
+                    layer. If pixels outside the unit rectangles are requested, the edge
+                    pixels of the contents image will be extended outwards.
+ 'scale/scaleRange' : animate contentsScale factor of an UIView's layer contents.
+ 'center/centerRange' : contentsCenter defines a area to scale,default is [0 0 1 1],meaning of scall all of the contents
+ */
 @interface TVSpriteContents : ThinkVerbSpriteGroup <TVSpriteContents *>
 - (TVSpriteContents * (^)(CGRect))rect;
 - (TVSpriteContents * (^)(CGFloat))scale;
