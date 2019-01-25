@@ -1081,7 +1081,9 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     };
 }
 - (TVSpritePath *(^)(CGFloat, CGFloat))lineTo {
-    NSAssert(self.animation.values.count > 0, @"you must call beginWith first");
+    if (self.animation.values.count == 0) {
+        self.beginWith(self.thinkVerb.presentationLayer.position.x,self.thinkVerb.presentationLayer.position.y);
+    }
     [self addCachedCurvePointIfNeeded];
     return ^ TVSpritePath * (CGFloat x,CGFloat y) {
         CGMutablePathRef path = self.animation.path;
@@ -1091,7 +1093,9 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     };
 }
 - (TVSpritePath *(^)(CGFloat, CGFloat))curveTo {
-    NSAssert(self.animation.values.count > 0, @"you must call beginWith first");
+    if (self.animation.values.count == 0) {
+        self.beginWith(self.thinkVerb.presentationLayer.position.x,self.thinkVerb.presentationLayer.position.y);
+    }
     [self addCachedCurvePointIfNeeded];
     return ^ TVSpritePath * (CGFloat x,CGFloat y) {
         self.cachedCurvePoint = CGPointMake(x, y);

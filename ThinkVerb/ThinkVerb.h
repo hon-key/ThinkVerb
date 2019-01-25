@@ -393,13 +393,13 @@ Rotation sprite,based on ThinkVerbTransform3DType
 @end
 
 /**
- Contents sprite,use this sprite to animate bitmap of an UIView's layer.
+ Contents sprite,use this sprite to animate bitmap of an UIView's layer
  'drawRange' : animate from a bitmap to another bitmap, nil represents no bitmap
  'rect/rectRange' : animate rectangle of the contents,a rectangle in normalized image coordinates defining the
                     subrectangle of the `contents' property that will be drawn into the
                     layer. If pixels outside the unit rectangles are requested, the edge
-                    pixels of the contents image will be extended outwards.
- 'scale/scaleRange' : animate contentsScale factor of an UIView's layer contents.
+                    pixels of the contents image will be extended outwards
+ 'scale/scaleRange' : animate contentsScale factor of an UIView's layer contents
  'center/centerRange' : contentsCenter defines a area to scale,default is [0 0 1 1],meaning of scall all of the contents
  */
 @interface TVSpriteContents : ThinkVerbSpriteGroup <TVSpriteContents *>
@@ -415,16 +415,25 @@ Rotation sprite,based on ThinkVerbTransform3DType
 - (TVSpriteContents * (^)(CGFloat,CGFloat))minificationFilterBias;
 @end
 
+/**
+ Color sprite,use this sprite to animate color of an UIView's layer.
+ */
 @interface TVSpriteColor : ThinkVerbSpriteBasic <TVSpriteColor *>
 - (TVSpriteColor * (^)(UIColor *))transitTo;
 - (TVSpriteColor * (^)(UIColor *,UIColor *))transit;
 @end
 
+/**
+ CornerRadius sprite,use this sprite to animate cornerRadius of an UIView's layer.
+ */
 @interface TVSpriteCornerRadius : ThinkVerbSpriteBasic <TVSpriteCornerRadius *>
 - (TVSpriteCornerRadius * (^)(CGFloat))transitTo;
 - (TVSpriteCornerRadius * (^)(CGFloat,CGFloat))transit;
 @end
 
+/**
+ Border sprite,use this sprite to animate border width and border color of an UIView's layer.
+ */
 @interface TVSpriteBorder : ThinkVerbSpriteGroup <TVSpriteBorder *>
 - (TVSpriteBorder * (^)(CGFloat,CGFloat))width;
 - (TVSpriteBorder * (^)(CGFloat))widthTo;
@@ -432,6 +441,13 @@ Rotation sprite,based on ThinkVerbTransform3DType
 - (TVSpriteBorder * (^)(UIColor *))colorTo;
 @end
 
+/**
+ Path sprite,use this sprite to animate transition path of an UIView's layer
+ You use this to make a custom moving path,first you may call -beginWith to set your origin point, if you don't,sprite will sets it to current presentation layer position
+ You can call -timing to set timing function for evey animation point which is set from -lineto and -curveTo. if you don't sprite will automatically set the missing timing function property to linear timing function
+ You can call -endAtPercent to set end time for every eanimation point which is set from -lineto and -curveTo,if you don't sprite will automatically caculate missing keytimes evenly
+ You should call -cpt1 and -cpt2 to set control point for -curveTo to let system know how to do tnterpolation calculation
+ */
 @interface TVSpritePath : ThinkVerbSpriteKeyframe <TVSpritePath *>
 - (TVSpritePath * (^)(CGFloat,CGFloat))beginWith;
 - (TVSpritePath * (^)(CGFloat,CGFloat))lineTo;
