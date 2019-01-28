@@ -83,3 +83,9 @@ Copy all files from Thinkverb fold to your project
     ```
     view.TVAnimation.appearance.keepAlive(YES).end();
     ```
+
+
+
+## License
+
+ThinkVerb is released under the MIT license. See [LICENSE](https://github.com/hon-key/ThinkVerb/blob/master/LICENSE) for details.
