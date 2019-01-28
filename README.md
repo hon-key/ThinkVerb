@@ -21,3 +21,12 @@ view.TVAnimation.clear();
 view.TVAnimation.existSprite(rotation).stop();
 ```
 The action stop and release the rotation animation
+
+# Installation
+## using cocoapods
+```
+pod 'ThinkVerb'
+```
+
+## copy files
+Copy all files from Thinkverb fold to your project 
