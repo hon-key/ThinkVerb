@@ -24,6 +24,21 @@ The action stop and release the rotation animation
 
 You can see more animation example in ThinkVerbDemo project
 
+You can combine any animation,even like a gun:
+
+```
+view.TVAnimation.appearance.duration(3).timing(TVTiming.extremeEaseOut).end();
+view.TVAnimation.contents.drawRange(nil,[UIImage imageNamed:@"1"]).didStop(^{
+    view.TVAnimation.contents.drawRange([UIImage imageNamed:@"1"],[UIImage imageNamed:@"2"]).didStop(^{
+        view.TVAnimation.contents.drawRange([UIImage imageNamed:@"2"],[UIImage imageNamed:@"3"]).didStop(^{
+            view.TVAnimation.contents.drawRange([UIImage imageNamed:@"3"],[UIImage imageNamed:@"2"]).activate();
+        }).activate();
+    }).activate();
+}).activate();
+```
+
+
+
 # Installation
 ## Using cocoapods
 ```
@@ -63,3 +78,8 @@ Copy all files from Thinkverb fold to your project
 
     - [**path**](#path) **`animate transition path of an UIView's layer`**
 
+* ### Appearance
+    appearance sprite is used to configure default value to all sprite of an UIView, take an example,if you want all animation keep alive when finished,you may do it like this before you make any sprite:
+    ```
+    view.TVAnimation.appearance.keepAlive(YES).end();
+    ```
