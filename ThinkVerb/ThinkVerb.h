@@ -445,8 +445,8 @@ Rotation sprite,based on ThinkVerbTransform3DType
  Path sprite,use this sprite to animate transition path of an UIView's layer
  You use this to make a custom moving path,first you may call -beginWith to set your origin point, if you don't,sprite will sets it to current presentation layer position
  You can call -timing to set timing function for evey animation point which is set from -lineto and -curveTo. if you don't sprite will automatically set the missing timing function property to linear timing function
- You can call -endAtPercent to set end time for every eanimation point which is set from -lineto and -curveTo,if you don't sprite will automatically caculate missing keytimes evenly
- You should call -cpt1 and -cpt2 to set control point for -curveTo to let system know how to do tnterpolation calculation
+ You can call -endAtPercent to set end time for every animation point which is set from -lineto and -curveTo,if you don't sprite will automatically caculate missing keytimes evenly
+ You should call -cpt1 and -cpt2 to set control point for -curveTo to let system know how to do interpolation calculation
  */
 @interface TVSpritePath : ThinkVerbSpriteKeyframe <TVSpritePath *>
 - (TVSpritePath * (^)(CGFloat,CGFloat))beginWith;
