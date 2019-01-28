@@ -22,6 +22,8 @@ view.TVAnimation.existSprite(rotation).stop();
 ```
 The action stop and release the rotation animation
 
+You can see more animation example in ThinkVerbDemo project
+
 # Installation
 ## Using cocoapods
 ```
@@ -30,3 +32,34 @@ pod 'ThinkVerb'
 
 ## Copy files
 Copy all files from Thinkverb fold to your project 
+
+# Indexes
+
+* ### Basic
+
+    - [**move**](#move) **`animate your view's position from one place to another place, position is related to anchorPoint`**
+
+    - [**scale**](#scale) **`scale your view with times param`**
+
+    - [**rotate**](#rotate) **`rotate your view around x/y/z axis`**
+
+    - [**shadow**](#shadow) **`animate shadow offset/opacity/radius/color of a view,`**
+
+    - [**bounds**](#bounds) **`aniamte bounds of a view's layer,bounds,the effect is related to view position `**
+
+    - [**anchor**](#anchor) **`animate anchorPoint,normally you should animate anchor with other related animations`**
+
+    - [**translate**](#translate) **`animte your view's position using offset, can be apply to sublayer`**
+
+    - [**fade**](#fade) **`animate your view's opacity`**
+    
+    - [**contents**](#contents) **`animate bitmap of layer,using rect to animate rectangle of bitmap with range of [0 0 1 1],etc`**
+
+    - [**backgroundColor**](#backgroundColor) **`aniamte background color of an UIView`**
+
+    - [**cornerRadius**](#cornerRadius) **`animate cornerRadius of an UIView`**
+
+    - [**border**](#border) **`animate border's width and color of an UIView`**
+
+    - [**path**](#path) **`animate transition path of an UIView's layer`**
+
