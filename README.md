@@ -12,7 +12,7 @@ NSString *rotation = view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).act
 ```
 or you can create sprite with specific name:
 ```
-view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).activateAs(@"rotatation");
+view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).activateAs(@"rotation");
 ```
 
 The code rotate your view around the z axis from current angle to endAngle, asume that the current angle is 0, your view will make a turn. **`repeat(-1)`** make this animation repeat forever. At last you just need to call **`activate()`** and the animation will automatically run.
