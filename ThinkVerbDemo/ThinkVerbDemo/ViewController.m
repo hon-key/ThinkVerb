@@ -198,6 +198,7 @@ AnimationUnit animationSets[] = {
         _box.backgroundColor = [UIColor redColor];
         [_box addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(triggerAnimation)]];
         _box.TVAnimation.appearance.duration(3).timing(TVTiming.extremeEaseOut).keepAlive(YES).end();
+        [self.view addSubview:_box];
     }
     return _box;
 }
