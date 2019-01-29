@@ -212,6 +212,7 @@
  activates the animation and return the identifier of the animation.
  */
 - (NSString * (^)(void))activate;
+- (void (^)(NSString *))activateAs;
 /**
  stops the animation and removes it.
  */

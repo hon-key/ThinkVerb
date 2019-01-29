@@ -52,7 +52,7 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
                 *stop = YES;
             }
         }];
-        return sprite;
+        return sprite ?: [[ThinkVerbSprite alloc] init];
     };
 }
 - (void (^)(void))clear {
@@ -197,11 +197,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     self.animation.autoreverses = YES;
     return self;
 }
-- (id)keepAliveAtEnd {
-    self.animation.removedOnCompletion = NO;
-    self.animation.fillMode = kCAFillModeForwards;
-    return self;
-}
 - (id (^)(BOOL))keepAlive {
     return ^ id (BOOL value) {
         self.animation.removedOnCompletion = !value;
@@ -214,6 +209,19 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
         [self.thinkVerb.view.layer addAnimation:self.animation forKey:self.identifier];
         [self.thinkVerb.sprites addObject:self];
         return self.identifier;
+    };
+}
+- (void (^)(NSString *))activateAs {
+    return ^void (NSString *identifier) {
+        for (ThinkVerbSprite *sprite in self.thinkVerb.sprites) {
+            if ([sprite.identifier isEqualToString:identifier]) {
+                self.animation.delegate = nil;
+                return;
+            }
+        }
+        self.identifier = identifier;
+        [self.thinkVerb.view.layer addAnimation:self.animation forKey:identifier];
+        [self.thinkVerb.sprites addObject:self];
     };
 }
 - (void (^)(void))stop {
