@@ -10,6 +10,11 @@ ThinkVerb just have one entrance,that is TVAnimation of an UIView,it is a manage
 ```
 NSString *rotation = view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).activate();
 ```
+or you can create sprite with specific name:
+```
+view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).activateAs(@"rotatation");
+```
+
 The code rotate your view around the z axis from current angle to endAngle, asume that the current angle is 0, your view will make a turn. **`repeat(-1)`** make this animation repeat forever. At last you just need to call **`activate()`** and the animation will automatically run.
 
 #### If you want to stop rotation, most of time you just need to type:
@@ -20,6 +25,12 @@ view.TVAnimation.clear();
 ```
 view.TVAnimation.existSprite(rotation).stop();
 ```
+
+or using specific name:
+```
+view.TVAnimation.existSprite(@"rotation").stop();
+```
+
 The action stop and release the rotation animation
 
 You can see more animation example in ThinkVerbDemo project
