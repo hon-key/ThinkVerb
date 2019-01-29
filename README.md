@@ -57,7 +57,7 @@ pod 'ThinkVerb'
 ```
 
 ## Copy files
-Copy all files from Thinkverb fold to your project 
+Copy all files from Thinkverb folder to your project 
 
 # Indexes
 
