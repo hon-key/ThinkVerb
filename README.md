@@ -4,11 +4,14 @@
 
 # ThinkVerb
 ThinkVerb 是一组基于 CoreAnimation 的 API，相比与直接使用 CoreAnimation，ThinkVerb 通过链式语法进行编程，并且自管理 CAAnimation，你无需自己手动创建任何 CAAnimation 并将其添加到视图上。
+
 得益于此，ThinkVerb 可以用非常少的代码快速生成基础动画，不单单如此，你说写的代码还相当可读而易于维护。
+
 目前 ThinkVerb 的功能几乎涵盖了所有的基础动画，你可以轻松多个基础动画的组合来生成一个复杂的动画。如果用原生代码，你可能需要大量代码来完成此工作，但是用 ThinkVerb，你则可以在短短几行代码里完成相同的工作量。
 
 # Usage
 ThinkVerb 很简单，它只有一个入口，那就是ThinkVerb扩展 UIView 的一个属性：TVAnimation。
+
 TVAnimation 管理所有的动画单元，我们称动画单元为 Sprite，你需要做的只有：通过 TVAnimation 创建 sprite，配置 sprite，最后 activate sprite。
 这样，动画就被激活，UIView 将自动开始动画。
 
@@ -21,7 +24,7 @@ NSString *rotation = view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).act
 view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).activateAs(@"rotation");
 ```
 
-这行代码会绕着 z 轴旋转你的 UIView，其旋转角度是从 UIView 当前的角度旋转到 M_PI * 2，假设当前角度是 0，那就是转一圈。**`repeat(-1)`** 能够让 sprite 无限重复。最后，调用**`activate()`**就等于激活了该动画。
+这行代码会绕着 z 轴旋转你的 UIView，其旋转角度是从 UIView 当前的角度旋转到 M_PI * 2，假设当前角度是 0，那就是转一圈。**`repeat(-1)`** 能够让 sprite 无限重复。最后，调用 **`activate()`** 就等于激活了该动画。
 
 #### 通常情况下，如果你不让 sprite 永远重复下去，或者让 sprite 在动画结束时停留，sprite 会自动被移除并释放，而如上面的例子，你需要手动移除该动画:
 ```
