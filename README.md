@@ -1,6 +1,6 @@
 <img src="https://github.com/hon-key/ThinkVerb/blob/d5ad3fc25751bb9b388c97d0972f4c6ad4692414/Resources/logo.png" width = "100%" />
 
-[**English version**](https://github.com/hon-key/ThinkVerb/blob/master/README_EN.md)
+[English Introduction](https://github.com/hon-key/ThinkVerb/blob/master/README_EN.md)
 
 # ThinkVerb
 ThinkVerb 是一组基于 CoreAnimation 的 API，相比与直接使用 CoreAnimation，ThinkVerb 通过链式语法进行编程，并且自管理 CAAnimation，你无需自己手动创建任何 CAAnimation 并将其添加到视图上。
