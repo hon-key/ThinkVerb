@@ -26,7 +26,7 @@ view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).activateAs(@"rotation");
 
 这行代码会绕着 z 轴旋转你的 UIView，其旋转角度是从 UIView 当前的角度旋转到 M_PI * 2，假设当前角度是 0，那就是转一圈。**`repeat(-1)`** 能够让 sprite 无限重复。最后，调用 **`activate()`** 就等于激活了该动画。
 
-#### 通常情况下，如果你不让 sprite 永远重复下去，或者让 sprite 在动画结束时停留，sprite 会自动被移除并释放，而如上面的例子，你需要手动移除该动画:
+#### 通常情况下，如果你没有让 sprite 永远重复下去，或者没有让 sprite 在动画结束时停留，sprite 会自动被移除并释放，而如上面的例子，你需要手动移除该动画:
 ```
 view.TVAnimation.clear();
 ```
