@@ -5,12 +5,12 @@
 # ThinkVerb
 ThinkVerb 是一组基于 CoreAnimation 的 API，相比与直接使用 CoreAnimation，ThinkVerb 通过链式语法进行编程，并且自管理 CAAnimation，你无需自己手动创建任何 CAAnimation 并将其添加到视图上。
 
-得益于此，ThinkVerb 可以用非常少的代码快速生成基础动画，不单单如此，你说写的代码还相当可读而易于维护。
+得益于此，ThinkVerb 可以用非常少的代码快速生成基础动画，不单单如此，你所写的代码还相当可读而易于维护。
 
-目前 ThinkVerb 的功能几乎涵盖了所有的基础动画，你可以轻松多个基础动画的组合来生成一个复杂的动画。如果用原生代码，你可能需要大量代码来完成此工作，但是用 ThinkVerb，你则可以在短短几行代码里完成相同的工作量。
+目前 ThinkVerb 的功能几乎涵盖了所有的基础动画，你可以轻松通过多个基础动画的组合来生成一个复杂的动画。如果用原生代码，你可能需要大量代码来完成此工作，但是用 ThinkVerb，你则可以在短短几行代码里完成相同的工作量。
 
 # Usage
-ThinkVerb 很简单，它只有一个入口，那就是ThinkVerb扩展 UIView 的一个属性：TVAnimation。
+ThinkVerb 很简单，它只有一个入口，那就是 ThinkVerb 扩展 UIView 的一个属性：TVAnimation。
 
 TVAnimation 管理所有的动画单元，我们称动画单元为 Sprite，你需要做的只有：通过 TVAnimation 创建 sprite，配置 sprite，最后 activate sprite。
 这样，动画就被激活，UIView 将自动开始动画。
