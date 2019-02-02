@@ -57,11 +57,10 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 }
 - (void (^)(void))clear {
     return ^ void (void) {
-        [self.sprites enumerateObjectsUsingBlock:^(ThinkVerbSprite * _Nonnull obj, BOOL * _Nonnull stop) {
-            [self.view.layer removeAnimationForKey:obj.identifier];
-            obj.animation.delegate = nil;
+        NSSet<ThinkVerbSprite *> *sprites = [self.sprites copy];
+        [sprites enumerateObjectsUsingBlock:^(ThinkVerbSprite * _Nonnull obj, BOOL * _Nonnull stop) {
+            obj.stop();
         }];
-        [self.sprites removeAllObjects];
     };
 }
 - (ThinkVerbSpriteAppearance *)appearance {
@@ -370,10 +369,20 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     return super.activate;
 }
 
+- (void (^)(void))stop {
+    [self releasePath];
+    return super.stop;
+}
+
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     [super animationDidStop:anim finished:flag];
+    [self releasePath];
+}
+
+- (void)releasePath {
     CAKeyframeAnimation *animation = self.animation;
     CGPathRelease(animation.path);
+    animation.path = NULL;
 }
 
 @end
