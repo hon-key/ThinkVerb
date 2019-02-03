@@ -52,7 +52,7 @@ AnimationUnit animationSets[] = {
     if ([self respondsToSelector:prepareSEL]) {
         [self performSelectorOnMainThread:prepareSEL withObject:nil waitUntilDone:nil];
     }
-}
+} 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.box.center = self.view.center;
