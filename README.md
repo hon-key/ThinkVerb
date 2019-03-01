@@ -88,7 +88,7 @@ pod 'ThinkVerb'
 
     - [**fade**](#fade) **`淡入淡出`**
     
-    - [**contents**](#contents) **`对 cotnents 属性做动画，如 rect属性会对位图的渲染返回做动画，范围在 [0 0 1 1] 内`**
+    - [**contents**](#contents) **`对 cotnents 属性做动画，如 rect属性会对位图的渲染范围做动画，范围在 [0 0 1 1] 内`**
 
     - [**backgroundColor**](#backgroundColor) **`背景变换`**
 
