@@ -88,6 +88,7 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 - (TVSpriteCornerRadius *)cornerRadius {return [self createSprite:[TVSpriteCornerRadius class]];}
 - (TVSpriteBorder *)border {return [self createSprite:[TVSpriteBorder class]];}
 - (TVSpritePath *)path {return [self createSprite:[TVSpritePath class]];}
+- (TVSpriteBasicCustom *)basicCustom {return [self createSprite:[TVSpriteBasicCustom class]];}
 - (id)createSprite:(Class)cls {
     ThinkVerbSprite *sprite = [[cls alloc] init];
     sprite.thinkVerb = self;
@@ -288,6 +289,24 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     }
     return self;
 }
+- (id (^)(BOOL))additive {
+    return ^ id (BOOL value) {
+        ((CABasicAnimation *)self.animation).additive = value;
+        return self;
+    };
+}
+- (id (^)(BOOL))cumulative {
+    return ^ id (BOOL value) {
+        ((CABasicAnimation *)self.animation).cumulative = value;
+        return self;
+    };
+}
+- (id (^)(CAValueFunction *))valueFunction {
+    return ^ id (CAValueFunction *valueFunction) {
+        ((CABasicAnimation *)self.animation).valueFunction = valueFunction;
+        return self;
+    };
+}
 @end
 
 @implementation ThinkVerbSpriteGroup
@@ -387,6 +406,33 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
 
 @end
 
+#pragma mark - General Sprite
+@implementation TVSpriteBasicCustom
+- (TVSpriteBasicCustom *(^)(NSString *))property {
+    return ^ id (NSString *property) {
+        self.animation.keyPath = property;
+        return self;
+    };
+}
+- (TVSpriteBasicCustom *(^)(id))from {
+    return ^ id (id obj) {
+        self.animation.fromValue = obj;
+        return self;
+    };
+}
+- (TVSpriteBasicCustom *(^)(id))to {
+    return ^ id (id obj) {
+        self.animation.toValue = obj;
+        return self;
+    };
+}
+- (TVSpriteBasicCustom *(^)(id))by {
+    return ^ id (id obj) {
+        self.animation.byValue = obj;
+        return self;
+    };
+}
+@end
 #pragma mark - Sprite
 @implementation TVSpriteRotate
 - (NSString *)keyPath {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92602D6C222CCE18004425B1 /* TextProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92602D6B222CCE18004425B1 /* TextProgressView.m */; };
 		926F54E521EF63140066C8EE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 926F54E421EF63140066C8EE /* AppDelegate.m */; };
 		926F54E821EF63140066C8EE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926F54E721EF63140066C8EE /* ViewController.m */; };
 		926F54ED21EF63160066C8EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926F54EC21EF63160066C8EE /* Assets.xcassets */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		92602D6A222CCE18004425B1 /* TextProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextProgressView.h; sourceTree = "<group>"; };
+		92602D6B222CCE18004425B1 /* TextProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextProgressView.m; sourceTree = "<group>"; };
 		926F54E021EF63140066C8EE /* ThinkVerbDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThinkVerbDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		926F54E321EF63140066C8EE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		926F54E421EF63140066C8EE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -43,6 +46,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		92602D69222CCDDA004425B1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				92602D6A222CCE18004425B1 /* TextProgressView.h */,
+				92602D6B222CCE18004425B1 /* TextProgressView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		926F54D721EF63140066C8EE = {
 			isa = PBXGroup;
 			children = (
@@ -63,6 +75,7 @@
 		926F54E221EF63140066C8EE /* ThinkVerbDemo */ = {
 			isa = PBXGroup;
 			children = (
+				92602D69222CCDDA004425B1 /* View */,
 				926F54E321EF63140066C8EE /* AppDelegate.h */,
 				926F54E421EF63140066C8EE /* AppDelegate.m */,
 				969E463021F2CE660055E836 /* TableViewController.h */,
@@ -159,6 +172,7 @@
 				926F54E821EF63140066C8EE /* ViewController.m in Sources */,
 				926F54F321EF63160066C8EE /* main.m in Sources */,
 				926F54E521EF63140066C8EE /* AppDelegate.m in Sources */,
+				92602D6C222CCE18004425B1 /* TextProgressView.m in Sources */,
 				969E463221F2CE660055E836 /* TableViewController.m in Sources */,
 				926F54FC21EF63600066C8EE /* ThinkVerb.m in Sources */,
 			);

@@ -27,7 +27,7 @@
 @class TVSpriteRotate, TVSpriteScale, TVSpriteMove, TVSpriteFade;
 @class TVSpriteShadow, TVSpriteBounds, TVSpriteAnchor, TVSpriteTranslate;
 @class TVSpriteContents, TVSpriteColor, TVSpriteCornerRadius, TVSpriteBorder;
-@class TVSpritePath;
+@class TVSpritePath,TVSpriteBasicCustom;
 
 /**
  Every animation prite are inherit from class ThinkVerbSprite. And the class ThinkVerbSprite implement the protocol ThinkVerbSpriteLike. So all the animation sprites are ThinkVerbSpriteLike.
@@ -66,7 +66,7 @@
 @property (nonatomic,weak) UIView *view;
 /**
  Sprites contain all animations which is Animating / finished.
- Normaly, when an animation(sprite) is done, it will be removed from manager and auto released, but particularly when you call -keepAliveAtEnd of a sprite, the animation will not be removed, You must remove it yourself by calling -stop of the sprite or call -clear of the manager which owns it.
+ Normaly, when an animation(sprite) is done, it will be removed from manager and auto released, but particularly when you call -keepAlive of a sprite, the animation will not be removed, You must remove it yourself by calling -stop of the sprite or call -clear of the manager which owns it.
  */
 @property (nonatomic,strong) NSMutableSet<ThinkVerbSprite *> *sprites;
 /**
@@ -139,6 +139,13 @@
  Creates an animation sprite to animate path
  */
 - (TVSpritePath *)path;
+
+/**
+ Creates an animation sprite to animate custom basic animation
+ */
+- (TVSpriteBasicCustom *)basicCustom;
+
+
 @end
 
 /**
@@ -234,6 +241,22 @@
 
 @interface ThinkVerbSpriteBasic <T> : ThinkVerbSprite <T,CABasicAnimation *>
 @property (nonatomic,copy) NSString *keyPath;
+/* When true the value specified by the animation will be "added" to
+ * the current presentation value of the property to produce the new
+ * presentation value. The addition function is type-dependent, e.g.
+ * for affine transforms the two matrices are concatenated. Defaults to
+ * NO. */
+- (T (^)(BOOL))additive;
+/* The `cumulative' property affects how repeating animations produce
+ * their result. If true then the current value of the animation is the
+ * value at the end of the previous repeat cycle, plus the value of the
+ * current repeat cycle. If false, the value is simply the value
+ * calculated for the current repeat cycle. Defaults to NO. */
+- (T (^)(BOOL))cumulative;
+/* If non-nil a function that is applied to interpolated values
+ * before they are set as the new presentation value of the animation's
+ * target property. Defaults to nil. */
+- (T (^)(CAValueFunction *))valueFunction;
 @end
 
 @interface ThinkVerbSpriteGroup <T> : ThinkVerbSprite <T,CAAnimationGroup *>
@@ -255,6 +278,17 @@
  you no need to call this method all the time, because system will automatically caculate the average value between the two point if there are points betwwen them.
  */
 - (T (^)(NSInteger))endAtPercent;
+@end
+
+#pragma mark - General Sprite
+/**
+ CustomView
+ */
+@interface TVSpriteBasicCustom : ThinkVerbSpriteBasic <TVSpriteBasicCustom *>
+- (TVSpriteBasicCustom * (^)(NSString *))property;
+- (TVSpriteBasicCustom * (^)(id))from;
+- (TVSpriteBasicCustom * (^)(id))to;
+- (TVSpriteBasicCustom * (^)(id))by;
 @end
 
 #pragma mark - Sprite

@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "ThinkVerb.h"
+#import "TextProgressView.h"
 
 AnimationSection animationSections[] = {
     {.name = @"Base Animations",.unit = baseAnimations},
@@ -36,6 +37,7 @@ AnimationUnit baseAnimations[] = {
 };
 AnimationUnit animationSets[] = {
     {.key = @"Jump and Shake", .selector = @"jumpIcon"},
+    {.key = @"Lyrics Animation", .selector = @"lyricsAnimation"},
     {.key = nil, .selector = nil},
 };
 
@@ -88,6 +90,16 @@ AnimationUnit animationSets[] = {
 - (void)p_jumpIcon {
     self.box.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.box.layer.contents = (__bridge id)[UIImage imageNamed:@"1"].CGImage;
+}
+- (void)p_lyricsAnimation {
+    [_box removeFromSuperview];
+    TextProgressView *progressView = [[TextProgressView alloc] init];
+    progressView.label.text = @"ONE PUNCH-MAN";
+    _box = progressView;
+    [self.view addSubview:self.box];
+    [progressView.label sizeToFit];
+    self.box.frame = progressView.label.frame;
+    [self.box addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(triggerAnimation)]];
 }
 #pragma mark - Animation
 - (void)move {
@@ -188,6 +200,17 @@ AnimationUnit animationSets[] = {
 - (void)jumpIcon {
     self.box.TVAnimation.translate.yBy(-100).timing(TVTiming.extremeEaseOut).repeat(-1).reverse.duration(0.5).activate();
     self.box.TVAnimation.translate.x(-3,3).timing(TVTiming.extremeEaseOut).repeat(-1).reverse.duration(0.05).activate();
+}
+- (void)lyricsAnimation {
+    TextProgressLayer *layer = (TextProgressLayer *)self.box.layer;
+    self.box.TVAnimation.basicCustom.property(@"progress").timing(TVTiming.extremeEaseOut).duration(2).to(@1.0).keepAlive(YES).didStop(^{
+//        layer.progress = 0.5;
+//        self.box.TVAnimation.clear();
+//        self.box.TVAnimation.basicCustom.property(@"progress").timing(TVTiming.extremeEaseOut).duration(6).from(@0.5).to(@1.0).keepAlive(YES).didStop(^{
+//            layer.progress = 1.0;
+//            self.box.TVAnimation.clear();
+//        }).activate();
+    }).activate();
 }
 
 #pragma mark -
