@@ -203,13 +203,15 @@ AnimationUnit animationSets[] = {
 }
 - (void)lyricsAnimation {
     TextProgressLayer *layer = (TextProgressLayer *)self.box.layer;
-    self.box.TVAnimation.basicCustom.property(@"progress").timing(TVTiming.extremeEaseOut).duration(2).to(@1.0).keepAlive(YES).didStop(^{
-//        layer.progress = 0.5;
-//        self.box.TVAnimation.clear();
-//        self.box.TVAnimation.basicCustom.property(@"progress").timing(TVTiming.extremeEaseOut).duration(6).from(@0.5).to(@1.0).keepAlive(YES).didStop(^{
-//            layer.progress = 1.0;
-//            self.box.TVAnimation.clear();
-//        }).activate();
+    self.box.TVAnimation.basicCustom.property(@"progress").to(@0.5)
+    .timing(TVTiming.extremeEaseOut).duration(2).keepAlive(YES).didStop(^{
+        layer.progress = 0.5;
+        self.box.TVAnimation.clear();
+        self.box.TVAnimation.basicCustom.property(@"progress").to(@1.0)
+        .timing(TVTiming.extremeEaseOut).duration(6).keepAlive(YES).didStop(^{
+            layer.progress = 0;
+            self.box.TVAnimation.clear();
+        }).activate();
     }).activate();
 }
 

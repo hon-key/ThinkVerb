@@ -9,9 +9,9 @@
 #import "TextProgressView.h"
 
 @implementation TextProgressLayer
-- (instancetype)init {
-    if (self = [super init]) {
-        self.progress = 0.3;
+- (instancetype)initWithLayer:(TextProgressLayer *)layer {
+    if (self = [super initWithLayer:layer]) {
+        self.progress = layer.progress;
     }
     return self;
 }
@@ -26,6 +26,11 @@
     }else {
         return [super needsDisplayForKey:key];
     }
+}
+
+- (void)setProgress:(CGFloat)progress {
+    _progress = progress;
+    [self setNeedsDisplay];
 }
 
 @end
