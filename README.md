@@ -65,6 +65,11 @@ view.TVAnimation.contents.drawRange(nil,[UIImage imageNamed:@"1"]).didStop(^{
 pod 'ThinkVerb'
 ```
 
+# 版本信息
+当前版本：1.0.3
+更新:
+新增 property 自定义动画
+
 ## Copy files
 拷贝子 ThinkVerb 文件夹下的所有源码到你的工程
 
@@ -97,6 +102,8 @@ pod 'ThinkVerb'
     - [**border**](#border) **`对 view 的边框的宽度和颜色做动画`**
 
     - [**path**](#path) **`对 view 做关键帧动画，可通过贝塞尔控制点生成曲线动画`**
+    
+    - [**property**](#path) **`对 view 做自定义动画，可快速对自定义layer进行动画控制`**
 
 * ### Appearance
     appearance sprite 可以用来对某个 view 配置默认参数，如果你想让某个 view 的所有 sprite 默认在动画结束时停留而不移除，你可以在生成 sprite 之前写:
