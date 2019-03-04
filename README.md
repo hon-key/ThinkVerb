@@ -68,7 +68,7 @@ pod 'ThinkVerb'
 # 版本信息
 当前版本：1.0.3
 更新:
-新增 property 自定义动画
+新增 property 自定义动画，详见 ThinkVerbDemo
 
 ## Copy files
 拷贝子 ThinkVerb 文件夹下的所有源码到你的工程
