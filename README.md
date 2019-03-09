@@ -1,5 +1,9 @@
 <img src="https://github.com/hon-key/ThinkVerb/blob/d5ad3fc25751bb9b388c97d0972f4c6ad4692414/Resources/logo.png" width = "100%" />
 
+[![Cocoapods](https://img.shields.io/badge/pod-1.0.3-orange.svg)](https://img.shields.io/badge/pod-1.2.4-orange.svg)
+[![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://img.shields.io/badge/platform-iOS-lightgrey.svg)
+[![Language](https://img.shields.io/badge/language-Objective--C-blue.svg)](https://img.shields.io/badge/language-Objective--C-blue.svg)
+
 [English Introduction](https://github.com/hon-key/ThinkVerb/blob/master/README_EN.md)
 
 # ThinkVerb
