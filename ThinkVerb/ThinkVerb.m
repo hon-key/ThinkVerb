@@ -25,13 +25,6 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
 
-static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *animation) {
-    NSMutableArray *animations = [group.animations mutableCopy];
-    if (!animations) animations = [NSMutableArray new];
-    [animations addObject:animation];
-    group.animations = animations;
-}
-
 static void tv_cache_animations_into_sprite(ThinkVerbSprite *sprite,id animations,SEL cmd) {
     objc_setAssociatedObject(sprite, cmd, animations, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -40,6 +33,52 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     if (!animations) return nil;
     objc_setAssociatedObject(sprite, cmd, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     return animations;
+}
+
+static CASpringAnimation *tv_create_spring_animation_with_basicAnimation(CABasicAnimation *basicAnimation) {
+    if ([basicAnimation isKindOfClass:[CASpringAnimation class]]) {
+        return basicAnimation;
+    }
+    assert([basicAnimation isKindOfClass:[CABasicAnimation class]]);
+    CASpringAnimation *springAnimation = [[CASpringAnimation alloc] init];
+    springAnimation.fromValue = basicAnimation.fromValue;
+    springAnimation.toValue = basicAnimation.toValue;
+    springAnimation.byValue = basicAnimation.byValue;
+    springAnimation.valueFunction = basicAnimation.valueFunction;
+    springAnimation.cumulative = basicAnimation.cumulative;
+    springAnimation.additive = basicAnimation.additive;
+    springAnimation.keyPath = basicAnimation.keyPath;
+    springAnimation.removedOnCompletion = basicAnimation.removedOnCompletion;
+    springAnimation.delegate = basicAnimation.delegate;
+    springAnimation.timingFunction = basicAnimation.timingFunction;
+    return springAnimation;
+}
+
+static NSArray<CASpringAnimation *> *tv_create_spring_animations_with_basicAnimations(NSArray<CABasicAnimation *> *basicAnimations) {
+    NSMutableArray *mutableArray = [[NSMutableArray alloc] initWithCapacity:basicAnimations.count];
+    for (CABasicAnimation *basicAnimation in basicAnimations) {
+        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(basicAnimation);
+        [mutableArray addObject:springAnimation];
+    }
+    return [mutableArray copy];
+}
+
+static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *animation) {
+    NSMutableArray *animations = [group.animations mutableCopy];
+    if (!animations) animations = [NSMutableArray new];
+    if (animations.count > 0 &&
+        [animations.firstObject isKindOfClass:[CASpringAnimation class]] &&
+        [animation isKindOfClass:[CABasicAnimation class]]) {
+        CASpringAnimation *mirrorSpringAnimation = animations.firstObject;
+        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(animation);
+        springAnimation.mass = mirrorSpringAnimation.mass;
+        springAnimation.stiffness = mirrorSpringAnimation.stiffness;
+        springAnimation.damping = mirrorSpringAnimation.damping;
+        springAnimation.initialVelocity = mirrorSpringAnimation.initialVelocity;
+        animation = springAnimation;
+    }
+    [animations addObject:animation];
+    group.animations = animations;
 }
 
 @implementation ThinkVerb
@@ -307,6 +346,43 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
         return self;
     };
 }
+
+- (id (^)(CGFloat))mass {
+    return ^ id (CGFloat mass) {
+        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+        springAnimation.mass = mass;
+        self.animation = springAnimation;
+        return self;
+    };
+}
+
+- (id (^)(CGFloat))stiffness {
+    return ^ id (CGFloat stiffness) {
+        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+        springAnimation.stiffness = stiffness;
+        self.animation = springAnimation;
+        return self;
+    };
+}
+
+- (id (^)(CGFloat))damping {
+    return ^ id (CGFloat damping) {
+        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+        springAnimation.damping = damping;
+        self.animation = springAnimation;
+        return self;
+    };
+}
+
+- (id (^)(CGFloat))initialVelocity {
+    return ^ id (CGFloat initialVelocity) {
+        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+        springAnimation.initialVelocity = initialVelocity;
+        self.animation = springAnimation;
+        return self;
+    };
+}
+
 @end
 
 @implementation ThinkVerbSpriteGroup
@@ -316,6 +392,50 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
         self.animation.delegate = self;
     }
     return self;
+}
+
+- (id (^)(CGFloat))mass {
+    return ^ id (CGFloat mass) {
+        CAAnimationGroup *group = self.animation;
+        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+        for (CASpringAnimation *springAnimation in group.animations) {
+            springAnimation.mass = mass;
+        }
+        return self;
+    };
+}
+
+- (id (^)(CGFloat))stiffness {
+    return ^ id (CGFloat stiffness) {
+        CAAnimationGroup *group = self.animation;
+        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+        for (CASpringAnimation *springAnimation in group.animations) {
+            springAnimation.stiffness = stiffness;
+        }
+        return self;
+    };
+}
+
+- (id (^)(CGFloat))damping {
+    return ^ id (CGFloat damping) {
+        CAAnimationGroup *group = self.animation;
+        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+        for (CASpringAnimation *springAnimation in group.animations) {
+            springAnimation.damping = damping;
+        }
+        return self;
+    };
+}
+
+- (id (^)(CGFloat))initialVelocity {
+    return ^ id (CGFloat initialVelocity) {
+        CAAnimationGroup *group = self.animation;
+        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+        for (CASpringAnimation *springAnimation in group.animations) {
+            springAnimation.initialVelocity = initialVelocity;
+        }
+        return self;
+    };
 }
 @end
 

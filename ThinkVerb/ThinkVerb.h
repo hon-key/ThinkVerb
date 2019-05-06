@@ -22,6 +22,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+
 @class ThinkVerb, ThinkVerbSprite<T,A:CAAnimation *>, ThinkVerbSpriteAppearance;
 @class ThinkVerbSpriteBasic<T>, ThinkVerbSpriteGroup<T>;
 @class TVSpriteRotate, TVSpriteScale, TVSpriteMove, TVSpriteFade;
@@ -257,9 +259,24 @@
  * before they are set as the new presentation value of the animation's
  * target property. Defaults to nil. */
 - (T (^)(CAValueFunction *))valueFunction;
+
+/*
+ 
+ */
+- (T (^)(CGFloat))mass;
+- (T (^)(CGFloat))stiffness;
+- (T (^)(CGFloat))damping;
+- (T (^)(CGFloat))initialVelocity;
 @end
 
 @interface ThinkVerbSpriteGroup <T> : ThinkVerbSprite <T,CAAnimationGroup *>
+/*
+ Spring property in ThinkVerbSpriteGroup is the same as in ThinkVerbSpriteBasic, see ThinkVerbSpriteBasic for more detail
+ */
+- (T (^)(CGFloat))mass;
+- (T (^)(CGFloat))stiffness;
+- (T (^)(CGFloat))damping;
+- (T (^)(CGFloat))initialVelocity;
 @end
 
 @interface ThinkVerbSpriteKeyframe <T> : ThinkVerbSprite <T,CAKeyframeAnimation *>

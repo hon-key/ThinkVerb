@@ -33,6 +33,7 @@ AnimationUnit baseAnimations[] = {
     {.key = @"CornerRadius", .selector = @"cornerRadius"},
     {.key = @"Border", .selector = @"border"},
     {.key = @"Path", .selector = @"path"},
+    {.key = @"Spring", .selector = @"spring"},
     {.key = nil, .selector = nil},
 };
 AnimationUnit animationSets[] = {
@@ -195,7 +196,9 @@ AnimationUnit animationSets[] = {
         }).activate();
     }).activate();
 }
-
+- (void)spring {
+    self.box.TVAnimation.scale.to(1.01).damping(5).mass(1).initialVelocity(10000).stiffness(7500).duration(2).keepAlive(NO).activate();
+}
 #pragma mark -
 - (void)jumpIcon {
     self.box.TVAnimation.translate.yBy(-100).timing(TVTiming.extremeEaseOut).repeat(-1).reverse.duration(0.5).activate();
