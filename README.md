@@ -70,9 +70,10 @@ pod 'ThinkVerb'
 ```
 
 # 版本信息
-当前版本：1.0.3
+当前版本：1.0.4
 更新:
-新增 basicCustom 自定义动画，详见 ThinkVerbDemo
+新增了 spring 动画，现在，大部分 sprite 都可以轻松添加弹簧效果了
+由于弹簧效果仅支持到 iOS 9.0 以上，若要支持 iOS 8.0，需要 pod 1.0.3 版本
 
 ## Copy files
 拷贝子 ThinkVerb 文件夹下的所有源码到你的工程
