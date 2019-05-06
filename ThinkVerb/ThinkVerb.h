@@ -261,7 +261,11 @@
 - (T (^)(CAValueFunction *))valueFunction;
 
 /*
- 
+ Setting spring property for sprite
+ mass: The mass of the object attached to the end of the spring. Must be greater than 0. Defaults to one
+ stiffness: The spring stiffness coefficient. Must be greater than 0. Defaults to 100.
+ damping: The damping coefficient. Must be greater than or equal to 0. Defaults to 10.
+ initialVelocity: The initial velocity of the object attached to the spring. Defaults to zero, which represents an unmoving object. Negative values represent the object moving away from the spring attachment point, positive values represent the object moving towards the spring attachment point.
  */
 - (T (^)(CGFloat))mass;
 - (T (^)(CGFloat))stiffness;
