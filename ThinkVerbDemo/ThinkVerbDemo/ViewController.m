@@ -33,7 +33,9 @@ AnimationUnit baseAnimations[] = {
     {.key = @"CornerRadius", .selector = @"cornerRadius"},
     {.key = @"Border", .selector = @"border"},
     {.key = @"Path", .selector = @"path"},
+#if TV_ALLOW_SPRING_ANIMATION
     {.key = @"Spring", .selector = @"spring"},
+#endif
     {.key = nil, .selector = nil},
 };
 AnimationUnit animationSets[] = {
@@ -53,7 +55,7 @@ AnimationUnit animationSets[] = {
     self.title = self.unit->key;
     SEL prepareSEL = NSSelectorFromString([NSString stringWithFormat:@"p_%@",self.unit->selector]);
     if ([self respondsToSelector:prepareSEL]) {
-        [self performSelectorOnMainThread:prepareSEL withObject:nil waitUntilDone:nil];
+        [self performSelectorOnMainThread:prepareSEL withObject:nil waitUntilDone:NO];
     }
 } 
 - (void)viewDidLayoutSubviews {
@@ -66,7 +68,7 @@ AnimationUnit animationSets[] = {
 }
 
 - (void)triggerAnimation {
-    [self performSelectorOnMainThread:NSSelectorFromString(self.unit->selector) withObject:nil waitUntilDone:nil];
+    [self performSelectorOnMainThread:NSSelectorFromString(self.unit->selector) withObject:nil waitUntilDone:NO];
 }
 
 #pragma mark - prepare
@@ -196,9 +198,12 @@ AnimationUnit animationSets[] = {
         }).activate();
     }).activate();
 }
+#if TV_ALLOW_SPRING_ANIMATION
 - (void)spring {
     self.box.TVAnimation.scale.to(1.01).damping(5).mass(1).initialVelocity(10000).stiffness(7500).duration(2).keepAlive(NO).activate();
 }
+#endif
+
 #pragma mark -
 - (void)jumpIcon {
     self.box.TVAnimation.translate.yBy(-100).timing(TVTiming.extremeEaseOut).repeat(-1).reverse.duration(0.5).activate();

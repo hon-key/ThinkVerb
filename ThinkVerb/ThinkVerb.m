@@ -35,6 +35,7 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     return animations;
 }
 
+#if TV_ALLOW_SPRING_ANIMATION
 static CASpringAnimation *tv_create_spring_animation_with_basicAnimation(CABasicAnimation *basicAnimation) {
     if ([basicAnimation isKindOfClass:[CASpringAnimation class]]) {
         return basicAnimation;
@@ -62,10 +63,12 @@ static NSArray<CASpringAnimation *> *tv_create_spring_animations_with_basicAnima
     }
     return [mutableArray copy];
 }
+#endif
 
 static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *animation) {
     NSMutableArray *animations = [group.animations mutableCopy];
     if (!animations) animations = [NSMutableArray new];
+#if TV_ALLOW_SPRING_ANIMATION
     if (animations.count > 0 &&
         [animations.firstObject isKindOfClass:[CASpringAnimation class]] &&
         [animation isKindOfClass:[CABasicAnimation class]]) {
@@ -77,6 +80,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
         springAnimation.initialVelocity = mirrorSpringAnimation.initialVelocity;
         animation = springAnimation;
     }
+#endif
     [animations addObject:animation];
     group.animations = animations;
 }
@@ -347,6 +351,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     };
 }
 
+#if TV_ALLOW_SPRING_ANIMATION
 - (id (^)(CGFloat))mass {
     return ^ id (CGFloat mass) {
         CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
@@ -382,6 +387,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
         return self;
     };
 }
+#endif
 
 @end
 
@@ -394,6 +400,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     return self;
 }
 
+#if TV_ALLOW_SPRING_ANIMATION
 - (id (^)(CGFloat))mass {
     return ^ id (CGFloat mass) {
         CAAnimationGroup *group = self.animation;
@@ -437,6 +444,8 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
         return self;
     };
 }
+#endif
+
 @end
 
 @implementation ThinkVerbSpriteKeyframe
