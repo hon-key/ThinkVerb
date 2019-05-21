@@ -281,7 +281,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     };
 }
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    if (self.didStopAction) self.didStopAction();
+    if (self.didStopAction && flag) self.didStopAction();
     if ([self.thinkVerb.sprites containsObject:self] && self.animation.isRemovedOnCompletion) {
         self.animation.delegate = nil;
         [self.thinkVerb.sprites removeObject:self];

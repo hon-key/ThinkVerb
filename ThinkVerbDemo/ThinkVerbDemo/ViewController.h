@@ -23,6 +23,6 @@ extern AnimationUnit baseAnimations[];
 extern AnimationUnit animationSets[];
 
 @interface ViewController : UIViewController
-@property AnimationUnit *unit;
+@property (nonatomic,unsafe_unretained) AnimationUnit *unit;
 @end
 
