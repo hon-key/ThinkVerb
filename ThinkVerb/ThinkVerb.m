@@ -25,6 +25,18 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
 
+/*
+ Especially for ThinkVerbTransform3DType sprite,we maintain a HasTable to store which ThinkVerbTransform3DType sprite has added default methods
+ */
+static NSMutableDictionary<NSString *,NSNumber *> *tv_get_registered_3d_type_sprites() {
+    static NSMutableDictionary *sprites;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sprites = [[NSMutableDictionary alloc] init];
+    });
+    return sprites;
+}
+
 static void tv_cache_animations_into_sprite(ThinkVerbSprite *sprite,id animations,SEL cmd) {
     objc_setAssociatedObject(sprite, cmd, animations, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -115,7 +127,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     return appearance;
 }
 - (CALayer *)presentationLayer {
-    return self.view.layer.presentationLayer ?: self.view.layer;
+    return self.layer.presentationLayer ?: self.layer;
 }
 
 - (TVSpriteMove *)move {return [self createSprite:[TVSpriteMove class]];}
@@ -148,30 +160,25 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 
 @implementation UIView (ThinkVerb)
 - (ThinkVerb *)TVAnimation {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        unsigned int methodCount = 0,classCount = 0;
-        Method *methods = class_copyMethodList([ThinkVerbTransform3DTypeDefaultImplementation class], &methodCount);
-        Class *clses = objc_copyClassList(&classCount);
-        for (int i = 0; i < classCount; i++) {
-            if (class_conformsToProtocol(clses[i], @protocol(ThinkVerbTransform3DType)) &&
-                strcmp(class_getName(clses[i]), "ThinkVerbTransform3DTypeDefaultImplementation") != 0) {
-                for (int j = 0; j < methodCount; j++) {
-                    SEL mname = method_getName(methods[j]);
-                    IMP imp = method_getImplementation(methods[j]);
-                    const char *type = method_getTypeEncoding(methods[j]);
-                    class_addMethod(clses[i], mname, imp, type);
-                }
-            }
-        }
-        free(methods);free(clses);
-    });
     ThinkVerb *thinkverb = objc_getAssociatedObject(self, _cmd);
     if (!thinkverb) {
         thinkverb = [[ThinkVerb alloc] init];
         objc_setAssociatedObject(self, _cmd, thinkverb, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     thinkverb.view = self;
+    thinkverb.layer = self.layer;
+    return thinkverb;
+}
+@end
+
+@implementation CALayer (ThinkVerb)
+- (ThinkVerb *)TVAnimation {
+    ThinkVerb *thinkverb = objc_getAssociatedObject(self, _cmd);
+    if (!thinkverb) {
+        thinkverb = [[ThinkVerb alloc] init];
+        objc_setAssociatedObject(self, _cmd, thinkverb, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    thinkverb.layer = self;
     return thinkverb;
 }
 @end
@@ -197,6 +204,22 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 @implementation ThinkVerbSprite
 - (instancetype)init {
     if (self = [super init]) {
+        /*
+          Especially adding default methods for ThinkVerbTransform3DType sprite
+         */
+        if (class_conformsToProtocol([self class], @protocol(ThinkVerbTransform3DType)) &&
+            strcmp(class_getName([self class]), "ThinkVerbTransform3DTypeDefaultImplementation") != 0 &&
+            !tv_get_registered_3d_type_sprites()[NSStringFromClass([self class])].boolValue) {
+            unsigned int methodCount = 0;
+            Method *methods = class_copyMethodList([ThinkVerbTransform3DTypeDefaultImplementation class], &methodCount);
+            for (int i = 0; i < methodCount; i++) {
+                SEL mname = method_getName(methods[i]);
+                IMP imp = method_getImplementation(methods[i]);
+                const char *type = method_getTypeEncoding(methods[i]);
+                class_addMethod([self class], mname, imp, type);
+            }
+            tv_get_registered_3d_type_sprites()[NSStringFromClass([self class])] = @(YES);
+        }
         self.identifier = [[NSUUID UUID] UUIDString];
     }
     return self;
@@ -249,7 +272,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 }
 - (NSString *(^)(void))activate {
     return ^ NSString * (void) {
-        [self.thinkVerb.view.layer addAnimation:self.animation forKey:self.identifier];
+        [self.thinkVerb.layer addAnimation:self.animation forKey:self.identifier];
         [self.thinkVerb.sprites addObject:self];
         return self.identifier;
     };
@@ -263,13 +286,13 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
             }
         }
         self.identifier = identifier;
-        [self.thinkVerb.view.layer addAnimation:self.animation forKey:identifier];
+        [self.thinkVerb.layer addAnimation:self.animation forKey:identifier];
         [self.thinkVerb.sprites addObject:self];
     };
 }
 - (void (^)(void))stop {
     return ^ void (void) {
-        [self.thinkVerb.view.layer removeAnimationForKey:self.identifier];
+        [self.thinkVerb.layer removeAnimationForKey:self.identifier];
         self.animation.delegate = nil;
         [self.thinkVerb.sprites removeObject:self];
     };
@@ -983,7 +1006,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     return ^ TVSpriteAnchor * (CGFloat x,CGFloat y,CGFloat z) {
         CABasicAnimation *anchor = self.animation.animations[0];
         CABasicAnimation *anchorZ = self.animation.animations[1];
-        CALayer *layer = self.thinkVerb.view.layer.presentationLayer ?: self.thinkVerb.view.layer;
+        CALayer *layer = self.thinkVerb.layer.presentationLayer ?: self.thinkVerb.layer;
         anchor.toValue = @(CGPointMake(layer.anchorPoint.x + x,layer.anchorPoint.y + y));
         anchorZ.toValue = @(layer.anchorPointZ + z);
         return self;

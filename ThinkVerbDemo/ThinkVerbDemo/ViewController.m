@@ -35,7 +35,9 @@ AnimationUnit baseAnimations[] = {
     {.key = @"Path", .selector = @"path"},
 #if TV_ALLOW_SPRING_ANIMATION
     {.key = @"Spring", .selector = @"spring"},
+    {.key = @"Create layer spring sprite", .selector = @"createLayerSpringSprite"},
 #endif
+    {.key = @"SubLayer",.selector = @"sublayer"},
     {.key = nil, .selector = nil},
 };
 AnimationUnit animationSets[] = {
@@ -89,6 +91,13 @@ AnimationUnit animationSets[] = {
     self.box.backgroundColor = [UIColor whiteColor];
     self.box.layer.contents = (__bridge id)[UIImage imageNamed:@"1"].CGImage;
     self.box.frame = CGRectMake(0, 0, 100, 50);
+}
+- (void)p_sublayer {
+    UIView *anotherBox = [UIView new];
+    anotherBox.backgroundColor = [UIColor blueColor];
+    [self.view addSubview:anotherBox];
+    anotherBox.frame = CGRectMake(0, 0, 50, 50);
+    anotherBox.center = CGPointMake(self.view.center.x - 100, self.view.center.y);
 }
 - (void)p_jumpIcon {
     self.box.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -202,7 +211,13 @@ AnimationUnit animationSets[] = {
 - (void)spring {
     self.box.TVAnimation.scale.to(1.01).damping(5).mass(1).initialVelocity(10000).stiffness(7500).duration(2).keepAlive(NO).activate();
 }
+- (void)createLayerSpringSprite {
+    self.box.layer.TVAnimation.scale.to(1.01).damping(5).mass(1).initialVelocity(10000).stiffness(7500).duration(2).keepAlive(NO).activate();
+}
 #endif
+- (void)sublayer {
+    self.view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).duration(3).timing(TVTiming.extremeEaseOut).toSubLayer.activate();
+}
 
 #pragma mark -
 - (void)jumpIcon {

@@ -69,14 +69,28 @@
 - (ThinkVerb *)TVAnimation;
 @end
 
+@interface CALayer (ThinkVerb)
+/**
+ Get the animation manager of a CALayer.
+ Use the animation manager to create a ThinkVerbSprite and do animation operations.
+ This is the only entrance you should call in a CALayer.
+ And,is recommanded that you should not use this entrance in an UIView's layer, use UIView's TVAnimation as an entrance instead.
+ */
+- (ThinkVerb *)TVAnimation;
+@end
+
 /**
  Animation manager of a UIView
  */
 @interface ThinkVerb : NSObject
 /**
- The view which the receiver owns and create animation to.
+ The view which the receiver owns and create animation to. If you use a CALayer as an entrance, this property is nil
  */
 @property (nonatomic,weak) UIView *view;
+/**
+ The layer which the receiver owns and create animation to. If you use an UIView as an entrance, this property is the layer of the UIView
+ */
+@property (nonatomic,weak) CALayer *layer;
 /**
  Sprites contain all animations which is Animating / finished.
  Normaly, when an animation(sprite) is done, it will be removed from manager and auto released, but particularly when you call -keepAlive of a sprite, the animation will not be removed, You must remove it yourself by calling -stop of the sprite or call -clear of the manager which owns it.
