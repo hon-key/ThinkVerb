@@ -218,6 +218,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
                 const char *type = method_getTypeEncoding(methods[i]);
                 class_addMethod([self class], mname, imp, type);
             }
+            free(methods);
             tv_get_registered_3d_type_sprites()[NSStringFromClass([self class])] = @(YES);
         }
         self.identifier = [[NSUUID UUID] UUIDString];

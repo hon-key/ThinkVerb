@@ -316,7 +316,7 @@
 				);
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../ThinkVerb\"";
 				INFOPLIST_FILE = ThinkVerbDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -336,7 +336,7 @@
 				DEVELOPMENT_TEAM = 369359VRQ2;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../ThinkVerb\"";
 				INFOPLIST_FILE = ThinkVerbDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
