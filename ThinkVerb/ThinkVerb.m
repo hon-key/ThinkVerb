@@ -47,7 +47,6 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     return animations;
 }
 
-#if TV_ALLOW_SPRING_ANIMATION
 static CASpringAnimation *tv_create_spring_animation_with_basicAnimation(CABasicAnimation *basicAnimation) {
     if ([basicAnimation isKindOfClass:[CASpringAnimation class]]) {
         return basicAnimation;
@@ -75,24 +74,23 @@ static NSArray<CASpringAnimation *> *tv_create_spring_animations_with_basicAnima
     }
     return [mutableArray copy];
 }
-#endif
 
 static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *animation) {
     NSMutableArray *animations = [group.animations mutableCopy];
     if (!animations) animations = [NSMutableArray new];
-#if TV_ALLOW_SPRING_ANIMATION
-    if (animations.count > 0 &&
-        [animations.firstObject isKindOfClass:[CASpringAnimation class]] &&
-        [animation isKindOfClass:[CABasicAnimation class]]) {
-        CASpringAnimation *mirrorSpringAnimation = animations.firstObject;
-        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(animation);
-        springAnimation.mass = mirrorSpringAnimation.mass;
-        springAnimation.stiffness = mirrorSpringAnimation.stiffness;
-        springAnimation.damping = mirrorSpringAnimation.damping;
-        springAnimation.initialVelocity = mirrorSpringAnimation.initialVelocity;
-        animation = springAnimation;
+    if (@available(ios 9.0, *)) {
+        if (animations.count > 0 &&
+            [animations.firstObject isKindOfClass:[CASpringAnimation class]] &&
+            [animation isKindOfClass:[CABasicAnimation class]]) {
+            CASpringAnimation *mirrorSpringAnimation = animations.firstObject;
+            CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(animation);
+            springAnimation.mass = mirrorSpringAnimation.mass;
+            springAnimation.stiffness = mirrorSpringAnimation.stiffness;
+            springAnimation.damping = mirrorSpringAnimation.damping;
+            springAnimation.initialVelocity = mirrorSpringAnimation.initialVelocity;
+            animation = springAnimation;
+        }
     }
-#endif
     [animations addObject:animation];
     group.animations = animations;
 }
@@ -375,43 +373,49 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     };
 }
 
-#if TV_ALLOW_SPRING_ANIMATION
 - (id (^)(CGFloat))mass {
     return ^ id (CGFloat mass) {
-        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
-        springAnimation.mass = mass;
-        self.animation = springAnimation;
+        if (@available(ios 9.0, *)) {
+            CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+            springAnimation.mass = mass;
+            self.animation = springAnimation;
+        }
         return self;
     };
 }
 
 - (id (^)(CGFloat))stiffness {
     return ^ id (CGFloat stiffness) {
-        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
-        springAnimation.stiffness = stiffness;
-        self.animation = springAnimation;
+        if (@available(ios 9.0, *)) {
+            CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+            springAnimation.stiffness = stiffness;
+            self.animation = springAnimation;
+        }
         return self;
     };
 }
 
 - (id (^)(CGFloat))damping {
     return ^ id (CGFloat damping) {
-        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
-        springAnimation.damping = damping;
-        self.animation = springAnimation;
+        if (@available(ios 9.0, *)) {
+            CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+            springAnimation.damping = damping;
+            self.animation = springAnimation;
+        }
         return self;
     };
 }
 
 - (id (^)(CGFloat))initialVelocity {
     return ^ id (CGFloat initialVelocity) {
-        CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
-        springAnimation.initialVelocity = initialVelocity;
-        self.animation = springAnimation;
+        if (@available(ios 9.0, *)) {
+            CASpringAnimation *springAnimation = tv_create_spring_animation_with_basicAnimation(self.animation);
+            springAnimation.initialVelocity = initialVelocity;
+            self.animation = springAnimation;
+        }
         return self;
     };
 }
-#endif
 
 @end
 
@@ -424,13 +428,14 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     return self;
 }
 
-#if TV_ALLOW_SPRING_ANIMATION
 - (id (^)(CGFloat))mass {
     return ^ id (CGFloat mass) {
-        CAAnimationGroup *group = self.animation;
-        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
-        for (CASpringAnimation *springAnimation in group.animations) {
-            springAnimation.mass = mass;
+        if (@available(ios 9.0, *)) {
+            CAAnimationGroup *group = self.animation;
+            group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+            for (CASpringAnimation *springAnimation in group.animations) {
+                springAnimation.mass = mass;
+            }
         }
         return self;
     };
@@ -438,10 +443,12 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 
 - (id (^)(CGFloat))stiffness {
     return ^ id (CGFloat stiffness) {
-        CAAnimationGroup *group = self.animation;
-        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
-        for (CASpringAnimation *springAnimation in group.animations) {
-            springAnimation.stiffness = stiffness;
+        if (@available(ios 9.0, *)) {
+            CAAnimationGroup *group = self.animation;
+            group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+            for (CASpringAnimation *springAnimation in group.animations) {
+                springAnimation.stiffness = stiffness;
+            }
         }
         return self;
     };
@@ -449,10 +456,12 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 
 - (id (^)(CGFloat))damping {
     return ^ id (CGFloat damping) {
-        CAAnimationGroup *group = self.animation;
-        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
-        for (CASpringAnimation *springAnimation in group.animations) {
-            springAnimation.damping = damping;
+        if (@available(ios 9.0, *)) {
+            CAAnimationGroup *group = self.animation;
+            group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+            for (CASpringAnimation *springAnimation in group.animations) {
+                springAnimation.damping = damping;
+            }
         }
         return self;
     };
@@ -460,15 +469,16 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 
 - (id (^)(CGFloat))initialVelocity {
     return ^ id (CGFloat initialVelocity) {
-        CAAnimationGroup *group = self.animation;
-        group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
-        for (CASpringAnimation *springAnimation in group.animations) {
-            springAnimation.initialVelocity = initialVelocity;
+        if (@available(ios 9.0, *)) {
+            CAAnimationGroup *group = self.animation;
+            group.animations = tv_create_spring_animations_with_basicAnimations(group.animations);
+            for (CASpringAnimation *springAnimation in group.animations) {
+                springAnimation.initialVelocity = initialVelocity;
+            }
         }
         return self;
     };
 }
-#endif
 
 @end
 

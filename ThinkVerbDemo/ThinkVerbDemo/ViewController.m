@@ -33,10 +33,8 @@ AnimationUnit baseAnimations[] = {
     {.key = @"CornerRadius", .selector = @"cornerRadius"},
     {.key = @"Border", .selector = @"border"},
     {.key = @"Path", .selector = @"path"},
-#if TV_ALLOW_SPRING_ANIMATION
     {.key = @"Spring", .selector = @"spring"},
     {.key = @"Create layer spring sprite", .selector = @"createLayerSpringSprite"},
-#endif
     {.key = @"SubLayer",.selector = @"sublayer"},
     {.key = nil, .selector = nil},
 };
@@ -207,14 +205,12 @@ AnimationUnit animationSets[] = {
         }).activate();
     }).activate();
 }
-#if TV_ALLOW_SPRING_ANIMATION
 - (void)spring {
     self.box.TVAnimation.scale.to(1.01).damping(5).mass(1).initialVelocity(10000).stiffness(7500).duration(2).keepAlive(NO).activate();
 }
 - (void)createLayerSpringSprite {
     self.box.layer.TVAnimation.scale.to(1.01).damping(5).mass(1).initialVelocity(10000).stiffness(7500).duration(2).keepAlive(NO).activate();
 }
-#endif
 - (void)sublayer {
     self.view.TVAnimation.rotate.z.endAngle(M_PI * 2).repeat(-1).duration(3).timing(TVTiming.extremeEaseOut).toSubLayer.activate();
 }

@@ -22,19 +22,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-// If you want to adapt CASpringAnimation API yourself,add TV_SPRING_ANIMATION_VERSION_CONTROL_DISABLE into Thinkverb cocoapods target's 'Preprocessor Macros'
-// 由于 CASpringAnimation 无法支持 iOS 8.0, 默认在支持 iOS 8.0 上的工程里, 相关 API 会被禁止，如果你想自己适配，在 Thinkverb target 的 Build Settings 里的 Preprocessor Macros 添加 TV_SPRING_ANIMATION_VERSION_CONTROL_DISABLE
-#ifdef TV_SPRING_ANIMATION_VERSION_CONTROL_DISABLE
-    #define TV_ALLOW_SPRING_ANIMATION 1
-#else
-    #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_9_0
-        #define TV_ALLOW_SPRING_ANIMATION 1
-    #else
-        #define TV_ALLOW_SPRING_ANIMATION 0
-    #endif
-#endif
-
-
 @class ThinkVerb, ThinkVerbSprite<T,A:CAAnimation *>, ThinkVerbSpriteAppearance;
 @class ThinkVerbSpriteBasic<T>, ThinkVerbSpriteGroup<T>;
 @class TVSpriteRotate, TVSpriteScale, TVSpriteMove, TVSpriteFade;
@@ -285,7 +272,6 @@
  * target property. Defaults to nil. */
 - (T (^)(CAValueFunction *))valueFunction;
 
-#if TV_ALLOW_SPRING_ANIMATION
 /*
  Setting spring property for sprite
  mass: The mass of the object attached to the end of the spring. Must be greater than 0. Defaults to one
@@ -298,11 +284,9 @@
 - (T (^)(CGFloat))damping;
 - (T (^)(CGFloat))initialVelocity;
 
-#endif
 @end
 
 @interface ThinkVerbSpriteGroup <T> : ThinkVerbSprite <T,CAAnimationGroup *>
-#if TV_ALLOW_SPRING_ANIMATION
 /*
  Spring property in ThinkVerbSpriteGroup is the same as in ThinkVerbSpriteBasic, see ThinkVerbSpriteBasic for more detail
  */
@@ -310,7 +294,6 @@
 - (T (^)(CGFloat))stiffness;
 - (T (^)(CGFloat))damping;
 - (T (^)(CGFloat))initialVelocity;
-#endif
 @end
 
 @interface ThinkVerbSpriteKeyframe <T> : ThinkVerbSprite <T,CAKeyframeAnimation *>
