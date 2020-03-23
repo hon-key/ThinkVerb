@@ -47,6 +47,8 @@ static id tv_get_animations_from_sprite(ThinkVerbSprite *sprite,SEL cmd) {
     return animations;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
 static CASpringAnimation *tv_create_spring_animation_with_basicAnimation(CABasicAnimation *basicAnimation) {
     if ([basicAnimation isKindOfClass:[CASpringAnimation class]]) {
         return basicAnimation;
@@ -74,6 +76,7 @@ static NSArray<CASpringAnimation *> *tv_create_spring_animations_with_basicAnima
     }
     return [mutableArray copy];
 }
+#pragma clang diagnostic pop
 
 static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *animation) {
     NSMutableArray *animations = [group.animations mutableCopy];
