@@ -274,6 +274,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 }
 - (NSString *(^)(void))activate {
     return ^ NSString * (void) {
+        [self modifyDurationForSpringAnimation];
         [self.thinkVerb.layer addAnimation:self.animation forKey:self.identifier];
         [self.thinkVerb.sprites addObject:self];
         return self.identifier;
@@ -281,6 +282,7 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
 }
 - (void (^)(NSString *))activateAs {
     return ^void (NSString *identifier) {
+        [self modifyDurationForSpringAnimation];
         for (ThinkVerbSprite *sprite in self.thinkVerb.sprites) {
             if ([sprite.identifier isEqualToString:identifier]) {
                 self.animation.delegate = nil;
@@ -314,6 +316,23 @@ static void tv_add_animation_for_group(CAAnimationGroup *group,CAAnimation *anim
     self.didStopAction = nil;
 }
 - (id)with {return self;}
+
+- (void)modifyDurationForSpringAnimation {
+    // if we use spring animation, set duration as evaluated duration
+    if (@available(ios 9.0, *)) {
+        if ([self.animation isKindOfClass:CASpringAnimation.class]) {
+            self.animation.duration = ((CASpringAnimation *)self.animation).settlingDuration;
+        }else if ([self.animation isKindOfClass:CAAnimationGroup.class]) {
+            CAAnimationGroup *group = self.animation;
+            for (CABasicAnimation *basicAnimation in group.animations) {
+                if ([basicAnimation isKindOfClass:CASpringAnimation.class]) {
+                    group.duration = ((CASpringAnimation *)basicAnimation).settlingDuration;
+                    break;
+                }
+            }
+        }
+    }
+}
 @end
 
 @implementation ThinkVerbTransform3DTypeDefaultImplementation
